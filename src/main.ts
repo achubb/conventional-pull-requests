@@ -1,19 +1,33 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from "@actions/core"
+import * as github from "@actions/github"
+import { lintPR } from "./lint-pr";
 
-async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
-  }
+function getPrTitle(): string | undefined {
+    // TODO - Tidy Up...
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const pullRequest = github.context.payload.pull_request;
+    if (!pullRequest) {
+        return undefined
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return pullRequest.title
 }
 
-run()
+async function run(): Promise<void> {
+    try {
+        const configurationPath = core.getInput('configuration-path', {required: true})
+        const prTitle = getPrTitle()
+
+        if (!prTitle) {
+            core.debug('Could not get Pull Request Title')
+            return
+        }
+
+        await lintPR(prTitle, configurationPath)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+void run()

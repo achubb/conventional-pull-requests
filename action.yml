@@ -1,11 +1,11 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Conventional Pull Requests'
+description: 'Checks PR names against conventional commits using commitlint'
+author: 'Andy Chubb'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  configuration-path:
+    description: 'The path for the commitlint config'
+    required: false
+    default: './commitlint.config.js'
 runs:
   using: 'node16'
   main: 'dist/index.js'
