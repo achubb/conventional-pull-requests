@@ -7,13 +7,12 @@
 		"declarationMap": true,
 		"sourceMap": true, // Include sourcemaps for debug
 		"target": "es5",
-		"outDir": "./lib", // Target for the bundled library
+		"outDir": "dist", // Target for the bundled library
 		"moduleResolution": "node",
 		"allowSyntheticDefaultImports": true,
 		"emitDeclarationOnly": true,
-		"rootDir": "./src",
+		"rootDir": "src",
 		"skipLibCheck": true, // Don't need to type check libs
 		"strict": true,
 	},
-  "exclude": ["node_modules", "**/*.test.ts"]
 }
