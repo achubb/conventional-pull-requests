@@ -1,18 +1,12 @@
 {
 	"compilerOptions": {
-		"jsx": "react", // Convert JSX Syntax into React CreateElement...
-		"module": "ESNext", // Use modern ES6 type modules
-		"declaration": true, // Create type declarations for use in js|ts projects
-		"declarationDir": "types",
-		"declarationMap": true,
-		"sourceMap": true, // Include sourcemaps for debug
-		"target": "es5",
-		"outDir": "dist", // Target for the bundled library
-		"moduleResolution": "node",
-		"allowSyntheticDefaultImports": true,
-		"emitDeclarationOnly": true,
-		"rootDir": "src",
-		"skipLibCheck": true, // Don't need to type check libs
-		"strict": true,
+	  "target": "es6",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */
+	  "module": "commonjs",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+	  "outDir": "./lib",                        /* Redirect output structure to the directory. */
+	  "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+	  "strict": true,                           /* Enable all strict type-checking options. */
+	  "noImplicitAny": true,                    /* Raise error on expressions and declarations with an implied 'any' type. */
+	  "esModuleInterop": true                   /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
 	},
-}
+	"exclude": ["node_modules"]
+  }

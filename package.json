@@ -1,20 +1,16 @@
 {
   "name": "typescript-action",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "description": "TypeScript template action",
-  "main": "dist/cjs/main.js",
-	"module": "dist/esm/main.js",
-	"files": [
-		"dist"
-	],
-	"types": "dist/main.d.ts",
+  "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
-    "rollup": "rollup -c"
+    "rollup": "rollup -c",
+    "package": "ncc build --source-map --license licenses.txt"
   },
   "repository": {
     "type": "git",
