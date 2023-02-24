@@ -8,4 +8,4 @@ inputs:
     default: './commitlint.config.js'
 runs:
   using: 'node16'
-  main: 'dist/esm/main.js'
+  main: 'dist/cjs/main.js'
