@@ -1,6 +1,6 @@
 {
   "name": "typescript-action",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "private": true,
   "description": "TypeScript template action",
   "main": "lib/main.js",
@@ -29,6 +29,7 @@
     "typescript": "^4.9.5"
   },
   "devDependencies": {
+    "@commitlint/format": "^17.4.4",
     "@commitlint/lint": "^17.4.4",
     "@commitlint/load": "^17.4.4",
     "@commitlint/types": "^17.4.4",

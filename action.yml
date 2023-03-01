@@ -2,10 +2,14 @@ name: 'Conventional Pull Requests'
 description: 'Checks PR names against conventional commits using commitlint'
 author: 'Andy Chubb'
 inputs:
-  configuration-path:
-    description: 'The path for the commitlint config'
+  commitlintConfigFile:
+    description: path to commitlint config file
     required: false
-    default: './commitlint.config.js'
+    default: ./commitlint.config.js
+  helpUrl:
+    description: help url for users of this action
+    required: false
+    default: 'https://www.conventionalcommits.org'
 runs:
   using: 'node16'
   main: 'dist/index.js'

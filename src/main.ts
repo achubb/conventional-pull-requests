@@ -1,33 +1,31 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as core from "@actions/core"
 import * as github from "@actions/github"
-import { lintPR } from "./lint-pr";
+import { lint, formatResult } from './lint';
 
-function getPrTitle(): string | undefined {
-    // TODO - Tidy Up...
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    const pullRequest = github.context.payload.pull_request;
-    if (!pullRequest) {
-        return undefined
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    return pullRequest.title
-}
 
 async function run(): Promise<void> {
+    const title = github.context.payload.pull_request?.title;
+    const configFile = core.getInput('commitlintConfigFile');
+
+    core.info(`Checking if the title of this PR "${title}" meets the requirements ...`);
+
     try {
-        const configurationPath = core.getInput('configuration-path', {required: true})
-        const prTitle = getPrTitle()
-
-        if (!prTitle) {
-            core.debug('Could not get Pull Request Title')
-            return
+        const lintResult = await lint(title, configFile);
+        if (!lintResult.valid) {
+            core.setFailed(`\n ${formatResult(lintResult)}`);
+        } else {
+            core.info('✔️ All good');
         }
-
-        await lintPR(prTitle, configurationPath)
-
     } catch (error) {
-        console.log(error)
+        core.setFailed(error as Error);
     }
 }
 
+
+
 void run()
+
