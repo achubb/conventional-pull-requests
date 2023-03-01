@@ -1,6 +1,147 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6099:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.lintPR = void 0;
+const load_1 = __importDefault(__nccwpck_require__(3237));
+const lint_1 = __importDefault(__nccwpck_require__(9584));
+function selectParserOpts(parserPreset) {
+    if (typeof parserPreset !== 'object') {
+        return null;
+    }
+    if (typeof parserPreset.parserOpts !== 'object') {
+        return null;
+    }
+    return parserPreset.parserOpts;
+}
+function getLintOptions(config) {
+    const opts = {
+        parserOpts: {},
+        plugins: {},
+        ignores: [],
+        defaultIgnores: true
+    };
+    if (config.parserPreset) {
+        const parserOpts = selectParserOpts(config.parserPreset);
+        if (parserOpts)
+            opts.parserOpts = parserOpts;
+    }
+    if (config.plugins) {
+        opts.plugins = config.plugins;
+    }
+    if (config.ignores) {
+        opts.ignores = config.ignores;
+    }
+    if (!config.defaultIgnores) {
+        opts.defaultIgnores = false;
+    }
+    return opts;
+}
+function lintPR(title, configurationPath) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const config = yield (0, load_1.default)({}, { file: configurationPath, cwd: process.cwd() });
+        const options = getLintOptions(config);
+        const result = yield (0, lint_1.default)(title, config.rules, options);
+        if (result.valid)
+            return;
+        const errorMessage = result.errors.map(({ message, name }) => `${name}:${message}`).join('\n');
+        throw new Error(errorMessage);
+    });
+}
+exports.lintPR = lintPR;
+
+
+/***/ }),
+
+/***/ 6934:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(7820));
+const github = __importStar(__nccwpck_require__(3737));
+const lint_pr_1 = __nccwpck_require__(6099);
+function getPrTitle() {
+    // TODO - Tidy Up...
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const pullRequest = github.context.payload.pull_request;
+    if (!pullRequest) {
+        return undefined;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return pullRequest.title;
+}
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const configurationPath = core.getInput('configuration-path', { required: true });
+            const prTitle = getPrTitle();
+            if (!prTitle) {
+                core.debug('Could not get Pull Request Title');
+                return;
+            }
+            yield (0, lint_pr_1.lintPR)(prTitle, configurationPath);
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
+}
+void run();
+
+
+/***/ }),
+
 /***/ 6580:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -83272,147 +83413,6 @@ module.exports = (input, options) => {
 
 /***/ }),
 
-/***/ 7098:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.lintPR = void 0;
-const load_1 = __importDefault(__nccwpck_require__(3237));
-const lint_1 = __importDefault(__nccwpck_require__(9584));
-function selectParserOpts(parserPreset) {
-    if (typeof parserPreset !== 'object') {
-        return null;
-    }
-    if (typeof parserPreset.parserOpts !== 'object') {
-        return null;
-    }
-    return parserPreset.parserOpts;
-}
-function getLintOptions(config) {
-    const opts = {
-        parserOpts: {},
-        plugins: {},
-        ignores: [],
-        defaultIgnores: true
-    };
-    if (config.parserPreset) {
-        const parserOpts = selectParserOpts(config.parserPreset);
-        if (parserOpts)
-            opts.parserOpts = parserOpts;
-    }
-    if (config.plugins) {
-        opts.plugins = config.plugins;
-    }
-    if (config.ignores) {
-        opts.ignores = config.ignores;
-    }
-    if (!config.defaultIgnores) {
-        opts.defaultIgnores = false;
-    }
-    return opts;
-}
-function lintPR(title, configurationPath) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const config = yield (0, load_1.default)({}, { file: configurationPath, cwd: process.cwd() });
-        const options = getLintOptions(config);
-        const result = yield (0, lint_1.default)(title, config.rules, options);
-        if (result.valid)
-            return;
-        const errorMessage = result.errors.map(({ message, name }) => `${name}:${message}`).join('\n');
-        throw new Error(errorMessage);
-    });
-}
-exports.lintPR = lintPR;
-
-
-/***/ }),
-
-/***/ 7879:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(7820));
-const github = __importStar(__nccwpck_require__(3737));
-const lint_pr_1 = __nccwpck_require__(7098);
-function getPrTitle() {
-    // TODO - Tidy Up...
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-    const pullRequest = github.context.payload.pull_request;
-    if (!pullRequest) {
-        return undefined;
-    }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    return pullRequest.title;
-}
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const configurationPath = core.getInput('configuration-path', { required: true });
-            const prTitle = getPrTitle();
-            if (!prTitle) {
-                core.debug('Could not get Pull Request Title');
-                return;
-            }
-            yield (0, lint_pr_1.lintPR)(prTitle, configurationPath);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    });
-}
-void run();
-
-
-/***/ }),
-
 /***/ 8337:
 /***/ ((module) => {
 
@@ -84245,7 +84245,7 @@ module.exports = {"version":"10.9.1"};
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(7879);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6934);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()
