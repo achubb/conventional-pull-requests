@@ -49,7 +49,6 @@ function formatResult(lintResult) {
     if (helpUrl) {
         options.helpUrl = helpUrl;
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
     return (0, format_1.default)({
         results: [
             {
@@ -103,30 +102,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
 const lint_1 = __nccwpck_require__(8530);
+function getPrTitle() {
+    let prTitle;
+    if (github.context.payload.pull_request && github.context.payload.title) {
+        prTitle = github.context.payload.pull_request.title;
+    }
+    else {
+        prTitle = undefined;
+    }
+    return prTitle;
+}
 function run() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        const title = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.title;
+        const title = getPrTitle();
         const configFile = core.getInput('commitlintConfigFile');
-        core.info(`Checking if the title of this PR "${title}" meets the requirements ...`);
-        try {
-            const lintResult = yield (0, lint_1.lint)(title, configFile);
-            if (!lintResult.valid) {
-                core.setFailed(`\n ${(0, lint_1.formatResult)(lintResult)}`);
+        core.info(`Checking if the title of this PR "${title !== null && title !== void 0 ? title : ""}" meets the requirements ...`);
+        if (title) {
+            try {
+                const lintResult = yield (0, lint_1.lint)(title, configFile);
+                if (!lintResult.valid) {
+                    core.setFailed(`\n ${(0, lint_1.formatResult)(lintResult)}`);
+                }
+                else {
+                    core.info('✔️ All good');
+                }
             }
-            else {
-                core.info('✔️ All good');
+            catch (error) {
+                core.setFailed(error);
             }
-        }
-        catch (error) {
-            core.setFailed(error);
         }
     });
 }
