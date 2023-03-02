@@ -12,4 +12,4 @@ inputs:
     default: 'https://www.conventionalcommits.org'
 runs:
   using: 'node16'
-  main: 'dist/main.js'
+  main: 'dist/index.js'
