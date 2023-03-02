@@ -4,9 +4,10 @@ import { lint, formatResult } from './lint';
 
 function getPrTitle(): string | undefined {
     let prTitle: string | undefined
+    const pullRequest = github.context.payload.pull_request
 
-    if(github.context.payload.pull_request && github.context.payload.title) {
-        prTitle = github.context.payload.pull_request.title as string
+    if(pullRequest && pullRequest.title) {
+        prTitle = pullRequest.title as string
     } else {
         prTitle = undefined
     }
@@ -32,7 +33,5 @@ async function run(): Promise<void> {
         }
     }
 }
-
-
 
 void run()

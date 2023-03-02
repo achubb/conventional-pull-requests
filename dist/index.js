@@ -107,8 +107,9 @@ const github = __importStar(__nccwpck_require__(5438));
 const lint_1 = __nccwpck_require__(8530);
 function getPrTitle() {
     let prTitle;
-    if (github.context.payload.pull_request && github.context.payload.title) {
-        prTitle = github.context.payload.pull_request.title;
+    const pullRequest = github.context.payload.pull_request;
+    if (pullRequest && pullRequest.title) {
+        prTitle = pullRequest.title;
     }
     else {
         prTitle = undefined;
