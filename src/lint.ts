@@ -11,6 +11,7 @@ import { LintOutcome, ParserOptions } from '@commitlint/types';
  */
 export async function lint(message: string, configFile?: string): Promise<LintOutcome> {
     const config = await commitlintLoad({}, { file: configFile });
+    // const test = await new Promise(resolve => setTimeout(resolve, 3000));
 
     return commitlintLint(
         message,
@@ -19,6 +20,7 @@ export async function lint(message: string, configFile?: string): Promise<LintOu
             ? { parserOpts: config.parserPreset.parserOpts as ParserOptions }
             : {}
     );
+
 }
 
 /**

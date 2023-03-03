@@ -32,6 +32,7 @@ const format_1 = __importDefault(__nccwpck_require__(5854));
 function lint(message, configFile) {
     return __awaiter(this, void 0, void 0, function* () {
         const config = yield (0, load_1.default)({}, { file: configFile });
+        // const test = await new Promise(resolve => setTimeout(resolve, 3000));
         return (0, lint_1.default)(message, config.rules, config.parserPreset
             ? { parserOpts: config.parserPreset.parserOpts }
             : {});
