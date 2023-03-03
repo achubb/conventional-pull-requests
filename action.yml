@@ -1,6 +1,9 @@
-name: 'Conventional Pull Requests'
-description: 'Checks PR names against conventional commits using commitlint'
-author: 'Andy Chubb'
+name: 'Commitlint PR title'
+description: 'This action runs your commitlint config against your Pull Request titles'
+author: 'Felix Hamann <felix.hamann@satellytes.com>'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
 inputs:
   commitlintConfigFile:
     description: path to commitlint config file
@@ -10,6 +13,3 @@ inputs:
     description: help url for users of this action
     required: false
     default: 'https://www.conventionalcommits.org'
-runs:
-  using: 'node16'
-  main: 'dist/index.js'
