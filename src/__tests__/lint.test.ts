@@ -1,30 +1,47 @@
-import { lint, formatResult } from '../lint';
+import { lint, formatResult } from "../lint";
 
-describe('lint.js', () => {
-    describe('lint', () => {
-        it('should detect a valid message', async () => {
-            const result = await lint('chore(valid-scope): valid subject (MPDI-1234)');
-            expect(result.valid).toBeTruthy();
-        });
+// Load custom commitlint config
+const customCommitlintConfig = "./src/__tests__/commitlint.config.js";
 
-        it('should detect an invalid message', async () => {
-            const result = await lint('invalid commit message', './src/__tests__/commitlint.config.js');
-            expect(result.valid).toBeFalsy();
-        });
-    });
+// Example of a valid commit message
+const validCommitMessage = "fix(scope): valid subject";
 
-    describe('formatResult', () => {
-        it('should return empty string for valid lint result', async () => {
-            const lintResult = await lint('chore(valid-scope): valid subject (MPDI-1234)');
-            expect(formatResult(lintResult)).toBe('');
-        });
+// Example of an invalid commit message
+const invalidCommitMessage = "invalid commit message";
 
-        it('should return a human-readable error message for invalid lint result', async () => {
-            const lintResult = await lint('invalid commit message', './src/__tests__/commitlint.config.js');
-            const formattedErrorMessage = formatResult(lintResult);
-            expect(formattedErrorMessage).toMatch('subject may not be empty');
-            expect(formattedErrorMessage).toMatch('type may not be empty');
-            expect(formattedErrorMessage).toMatch('found 2 problems, 0 warnings');
-        });
-    });
+describe("lint.ts", () => {
+	describe("lint", () => {
+		it("should detect a valid message", async () => {
+			const result = await lint(validCommitMessage);
+			expect(result.valid).toBeTruthy();
+		});
+
+		it("should detect an invalid message", async () => {
+			const result = await lint(
+				invalidCommitMessage,
+				customCommitlintConfig
+			);
+			expect(result.valid).toBeFalsy();
+		});
+	});
+
+	describe("formatResult", () => {
+		it("should return an empty string if the lint result is valid", async () => {
+			const lintResult = await lint(validCommitMessage);
+			expect(formatResult(lintResult)).toBe("");
+		});
+
+		it("should return a human-readable error message for invalid lint result", async () => {
+			const lintResult = await lint(
+				invalidCommitMessage,
+				customCommitlintConfig
+			);
+			const formattedErrorMessage = formatResult(lintResult);
+			expect(formattedErrorMessage).toMatch("subject may not be empty");
+			expect(formattedErrorMessage).toMatch("type may not be empty");
+			expect(formattedErrorMessage).toMatch(
+				"found 2 problems, 0 warnings"
+			);
+		});
+	});
 });
