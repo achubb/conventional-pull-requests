@@ -7,8 +7,7 @@
 	"license": "MIT",
 	"scripts": {
 		"lint": "eslint src/**/*.ts",
-		"bundle": "ncc build src/main.ts -m",
-		"prepare": "husky install"
+		"bundle": "ncc build src/main.ts -m"
 	},
 	"dependencies": {
 		"@actions/core": "^1.6.0",
@@ -27,7 +26,6 @@
 		"eslint": "^8.9.0",
 		"eslint-plugin-github": "^4.3.5",
 		"eslint-plugin-jest": "^26.1.1",
-		"husky": "^7.0.4",
 		"jest": "^27.5.1",
 		"jest-circus": "^27.5.1",
 		"nodemon": "^2.0.15",
