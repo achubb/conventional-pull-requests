@@ -98,4 +98,3 @@ Thumbs.db
 __tests__/runner/*
 *.todo
 lib/**/*
-package-lock.json
