@@ -1,22 +1,14 @@
-name: "build-test"
-on: # rebuild any PRs and main branch changes
+name: "test"
+on:
     pull_request:
-    push:
-        branches:
-            - main
-            - "releases/*"
+        types: ["opened", "edited", "reopened", "synchronize"]
 
 jobs:
-    build: # make sure build/bundle work properly
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-            - run: npm install
-            - run: npm run bundle
     test: # make sure the action works on a clean machine without building
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v1
+            - run: |
+                  yarn
+                  yarn build:pack
             - uses: ./
-              with:
-                	milliseconds: 1000
