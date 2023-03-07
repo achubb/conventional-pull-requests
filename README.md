@@ -1,105 +1,74 @@
+<h1 align="center">Conventional Pull Requests</h1>
+
+<p align="center">A Github action which will automatically lint your Pull Request titles to ensure that conform to <a href="https://www.conventionalcommits.org/" target="_blank">conventional commit standards</a>.</p>
+
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+  <img alt="Style: Prettier" src="https://img.shields.io/badge/style-prettier-21bb42.svg" />
+  <img alt="TypeScript: Strict" src="https://img.shields.io/badge/typescript-strict-21bb42.svg" />
 </p>
 
-# Create a JavaScript Action using TypeScript
+## How to use
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+This action can be run on any repo where you require pull request titles to meet conventional commit standards. Conventional pull request titles dovetails into [Semantic Versioning](https://semver.org/), whereby each pull request title details the type of update being made to the project. The type of the pull request can help to calculate the semantic version number.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
-
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
-  }
-}
-
-run()
-```
-
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
-
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+Create a new workflow action, you can specify particular branches or pull request types that the action will be run on. Note that we need to install `@commitlint/config-conventional`, which is the config we are using to enforce our conventional PR messages.
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+name: Pull Request Check
+
+on:
+    pull_request_target:
+        types: [opened, edited, synchronize]
+        branches: [main, beta]
+
+jobs:
+    check_pr:
+        name: Conventional PR Check
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install Commitlint Config
+              run: npm install --no-save @commitlint/config-conventional
+
+            - name: Conventional PR Check
+              uses: achubb/conventional-pull-requests@v0.0.29
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+## Writing conventional pull request titles
 
-## Usage:
+1. Commits MUST be prefixed with a type, which is normally of a noun, `feat`, `fix`, etc., followed by a colon and a space.
+2. The type `feat` MUST be used when a commit adds a new feature to your application or library.
+3. The type `fix` MUST be used when a commit represents a bug fix for your application.
+4. An optional scope MAY be provided after a type. A scope is a phrase describing a section of the codebase enclosed in parenthesis, e.g., `fix(parser):`
+5. A description MUST immediately follow the type/scope prefix. The description is a short description of the code changes, e.g., `fix: array parsing issue when multiple spaces were contained in string`.
+6. Breaking changes MUST be indicated at the very beginning of the footer or body section of a commit. A breaking change MUST consist of the uppercase text `BREAKING CHANGE`, followed by a colon and a space.
+7. A description MUST be provided after the `BREAKING CHANGE: `, describing what has changed about the API, e.g., `BREAKING CHANGE: environment variables now take precedence over config files`.
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+## Usage with semantic versioning
+
+Well formed conventional pull request titles are an important part of the release workflow for packages. We can use the semantic-release package to automatically tag and release packages as pull requests are merged. So `fix` type pull requests will trigger a new patch version (this is the last number of the version i.e `0.0.1`, `0.0.2`, etc) and `feat` type pull requests will trigger a new minor version (this is the middle value of the version i.e. `0.1.0`, `0.2.0`, etc).
+
+Anything with a breaking change, should trigger a new major release (this the the first value of the version i.e. `1.0.0`, `2.0.0`). This will be any pull request with `BREAKING CHANGE: ` in the body, this can be any **type** of pull request, but this will always take precedence over the pull request type.
+
+## Pull Request types
+
+The following types are recognized in conventional commits:
+
+| **Type** | **Title**                | **Description**                                                                                               |     |     |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- | --- | --- |
+| build    | Builds                   | Changes relating to the build system.                                                                         |     |     |
+| chore    | Chores                   | Catch-all type for work that doesn't fit easily into other types.                                             |     |     |
+| ci       | Continuous Integrations  | Changes to CI configuration files and scripts (i.e. Github Actions).                                          |     |     |
+| docs     | Documentation            | Changes relating to documentation.                                                                            |     |     |
+| feat     | Features                 | Changes made to introduce new features.                                                                       |     |     |
+| fix      | Bug Fixes                | Changes made to fix bugs or other issues.                                                                     |     |     |
+| perf     | Performance Improvements | Changes made relating to performance improvements, but otherwise doesn't change functionality.                |     |     |
+| refactor | Refactor                 | Changes that neither fix a bug nor introduce a feature.                                                       |     |     |
+| revert   | Reverts                  | Reverts to a previous commit.                                                                                 |     |     |
+| style    | Styles                   | Changes that do not affect the functionality of the code (white-space, formatting, missing semi-colons, etc). |     |     |
+| test     | Tests                    | Changes relating to testing.                                                                                  |     |     |
+
+These types can also be used in commit messages to help to easily identify the types of changes being made, although this linter will only lint pull request messages.
