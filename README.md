@@ -57,18 +57,18 @@ Anything with a breaking change, should trigger a new major release (this the th
 
 The following types are recognized in conventional commits:
 
-| **Type** | **Title**                | **Description**                                                                                               |     |     |
-| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- | --- | --- |
-| build    | Builds                   | Changes relating to the build system.                                                                         |     |     |
-| chore    | Chores                   | Catch-all type for work that doesn't fit easily into other types.                                             |     |     |
-| ci       | Continuous Integrations  | Changes to CI configuration files and scripts (i.e. Github Actions).                                          |     |     |
-| docs     | Documentation            | Changes relating to documentation.                                                                            |     |     |
-| feat     | Features                 | Changes made to introduce new features.                                                                       |     |     |
-| fix      | Bug Fixes                | Changes made to fix bugs or other issues.                                                                     |     |     |
-| perf     | Performance Improvements | Changes made relating to performance improvements, but otherwise doesn't change functionality.                |     |     |
-| refactor | Refactor                 | Changes that neither fix a bug nor introduce a feature.                                                       |     |     |
-| revert   | Reverts                  | Reverts to a previous commit.                                                                                 |     |     |
-| style    | Styles                   | Changes that do not affect the functionality of the code (white-space, formatting, missing semi-colons, etc). |     |     |
-| test     | Tests                    | Changes relating to testing.                                                                                  |     |     |
+| **Type** | **Title**                | **Description**                                                                                               |
+| -------- | ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| build    | Builds                   | Changes relating to the build system.                                                                         |
+| chore    | Chores                   | Catch-all type for work that doesn't fit easily into other types.                                             |
+| ci       | Continuous Integrations  | Changes to CI configuration files and scripts (i.e. Github Actions).                                          |
+| docs     | Documentation            | Changes relating to documentation.                                                                            |
+| feat     | Features                 | Changes made to introduce new features.                                                                       |
+| fix      | Bug Fixes                | Changes made to fix bugs or other issues.                                                                     |
+| perf     | Performance Improvements | Changes made relating to performance improvements, but otherwise doesn't change functionality.                |
+| refactor | Refactor                 | Changes that neither fix a bug nor introduce a feature.                                                       |
+| revert   | Reverts                  | Reverts to a previous commit.                                                                                 |
+| style    | Styles                   | Changes that do not affect the functionality of the code (white-space, formatting, missing semi-colons, etc). |
+| test     | Tests                    | Changes relating to testing.                                                                                  |
 
 These types can also be used in commit messages to help to easily identify the types of changes being made, although this linter will only lint pull request messages.
